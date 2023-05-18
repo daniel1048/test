@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tu Galería de Fotos</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Tu Galería de Fotos</h1>
+  </header>
+
+  <main id="gallery">
+    <!-- Las fotos se cargarán aquí automáticamente -->
+  </main>
+
+  <footer>
+    <p>&copy; 2023 Tu Galería de Fotos. Todos los derechos reservados.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/web3.storage/dist/bundle.js"></script>
+  <script>
+    async function loadFilesFromWeb3Storage() {
+      const client = new web3.storage.Web3Storage({ token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDZENUUzMWJCNTJiYzVCODZBNjUwMkE0NTIzQzNBNEY4RTJDNDNENUMiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NDEwMTU5MzkxODYsIm5hbWUiOiJOZXdFcmEifQ.mkmQ9kA46I9VCpHteXKX-JnVZlhuYNJ5V-KWiuhBqoY' }); // Reemplaza <tu-clave-de-api> con tu propia clave de API de Web3Storage
+
+      try {
+        const { cid } = await client.list(); // Recupera el CID (Content Identifier) de tu almacenamiento en Web3Storage
+        const files = await client.get(cid); // Obtiene los archivos asociados al CID
+
+        const galleryContainer = document.getElementById('gallery');
+        files.forEach(file => {
+          const imageUrl = URL.createObjectURL(file);
+          const imageAlt = file.name;
+
+          const imageDiv = document.createElement('div');
+          imageDiv.classList.add('image');
+
+          const image = document.createElement('img');
+          image.src = imageUrl;
+          image.alt = imageAlt;
+
+          imageDiv.appendChild(image);
+          galleryContainer.appendChild(imageDiv);
+        });
+      } catch (error) {
+        console.error('Error al recuperar los archivos:', error);
+      }
+    }
+
+    loadFilesFromWeb3Storage();
+  </script>
+</body>
+</html>
